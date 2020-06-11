@@ -29,3 +29,4 @@ if __name__ == "__main__":
     #img = Image.open("test.png")
     #print ("img type: ", type(image))
     procs = image_procseeing(resize_im)
+    print ("shape: ", procs.img.size)
