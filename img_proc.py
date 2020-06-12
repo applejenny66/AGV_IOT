@@ -16,32 +16,18 @@ class image_procseeing():
         #(1080, 1920, 3)
 
     def find_line(self):
+        
         self.gray = cv2.cvtColor(np.float32(self.img), cv2.COLOR_BGR2GRAY)
-        kernel_size = 5
-        self.blur_gray = cv2.GaussianBlur(self.gray, (kernel_size, kernel_size), 0)
-        
-        low_thres = 50
-        high_thres = 150
-        slice_blur_gray = np.uint8(self.blur_gray)
-        edges = cv2.Canny(slice_blur_gray, low_thres, high_thres)
-        
-        rho = 1
-        theta = np.pi / 180
-        threshold = 15
-        min_line_length = 50
-        max_line_gap = 20
-        
-        line_image = np.copy(self.img) * 0
-        
-        lines = cv2.HoughLinesP(edges, rho, theta, threshold, np.array([]),\
-                min_line_length, max_line_gap)
-
-        for line in lines:
-            for x1, y1, x2, y2 in line:
-                cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 5)
-
-        lines_edges = cv2.addWeighted(self.img, 0.8, line_image, 1, 0)
-        cv2.imwrite("line.png", lines_edges)
+        #kernel_size = 5
+        #self.blur_gray = cv2.GaussianBlur(self.gray, (kernel_size, kernel_size), 0)
+        self.edges = cv2.Canny(self.gray, 50, 150, apertureSize = 3)
+        minLineLength = 100
+        maxLineGap = 10
+        lines = cv2.HoughLinesP(edges, 1, np.pi/180, 100, \
+                minLineLength, maxLineGap)
+        for x1, y1, x2, y2 in lines[0]:
+            cv2.line(self.img, (x1, y1), (x2, y2), (0, 255, 0), 2)
+        cv2.imwrite("line.png", self.img)
 
 
 if __name__ == "__main__":
