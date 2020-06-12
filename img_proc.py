@@ -10,7 +10,7 @@ import cv2
 import numpy as np
 from car import car
 
-class image_procseeing():
+class image_processing():
     def __init__(self, img):
         self.img = img
         #(1080, 1920, 3)
@@ -35,11 +35,19 @@ if __name__ == "__main__":
     angle =  50
     #dc = car.angle_to_duty_cycle(angle)
     #car.pwm.ChangeDutyCycle(dc)
-    rawCapture = PiRGBArray(car.camera)
-    image, resize_im = car.capture(rawCapture)
+    
+
+    #rawCapture = PiRGBArray(car.camera)
+    #image, resize_im = car.capture(rawCapture)
+
 
     #img = Image.open("test.png")
     #print ("img type: ", type(image))
-    procs = image_procseeing(resize_im)
+    
+    #testing on no car
+    img = cv2.imread("testing_img.png")
+    procs = image_processing()
+    #procs = image_processing(resize_im)
+    
     print ("shape: ", procs.img.size)
     procs.find_line()
