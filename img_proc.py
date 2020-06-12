@@ -16,13 +16,14 @@ class image_procseeing():
         #(1080, 1920, 3)
 
     def find_line(self):
-        self.gray = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
+        self.gray = cv2.cvtColor(np.float32(self.img), cv2.COLOR_BGR2GRAY)
         kernel_size = 5
-        self.blur_gray = cv2.GaussianBlur(gray, (kernel_size, kernel_size), 0)
+        self.blur_gray = cv2.GaussianBlur(self.gray, (kernel_size, kernel_size), 0)
         
         low_thres = 50
         high_thres = 150
-        edges = cv2.Canny(self.blur_gray, low_thres, hogh_thres)
+        slice_blur_gray = np.uint8(self.blur_gray)
+        edges = cv2.Canny(slice_blur_gray, low_thres, high_thres)
         
         rho = 1
         theta = np.pi / 180
