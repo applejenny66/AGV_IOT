@@ -73,7 +73,6 @@ if __name__ == "__main__":
         res = center[label.flatten()]
         k_img = res.reshape((resize_frame.shape))
 
-        #cv2.imshow('res2',k_img)
         hsv_frame = rgbtohsl(k_img) # try hsl
         cv2.imshow('k_img', hsv_frame)
 
@@ -126,23 +125,43 @@ if __name__ == "__main__":
                 for y in range(0, height):
                     if (k_hsv[x, y, 0] == h_list[1] and k_hsv[x, y, 1] == s_list[1]\
                         and k_hsv[x, y, 2] == l_list[1]):
-                        result_frame[x, y, 0] = resize_frame[x, y, 0]
-                        result_frame[x, y, 1] = resize_frame[x, y, 1]
-                        result_frame[x, y, 2] = resize_frame[x, y, 2]
+                        tmp_color = (resize_frame[x, y, 0], resize_frame[x, y, 1], \
+                            resize_frame[x, y, 2])
+                        max_color = max(tmp_color)
+                        max_index = tmp_color.index(max_color)
+                        if (max_index == 0):
+                            result_frame[x, y, 1] = result_frame[x, y, 2] = 0
+                            result_frame[x, y, 0] = 255
+                        elif (max_index == 1):
+                            result_frame[x, y, 0] = result_frame[x, y, 2] = 0
+                            result_frame[x, y, 1] = 255
+                        else:
+                            result_frame[x, y, 0] = result_frame[x, y, 1] = 0
+                            result_frame[x, y, 2] = 255
                     else:
                         result_frame[x, y, 0] = result_frame[x, y, 1] = result_frame[x, y, 2] = 0
         else:
             for x in range(0, weight):
-                for y in range(0, height):
+                for y inhsv range(0, height):
                     if (k_hsv[x, y, 0] == h_list[0] and k_hsv[x, y, 1] == s_list[0]\
                         and k_hsv[x, y, 2] == l_list[0]):
-                        result_frame[x, y, 0] = resize_frame[x, y, 0]
-                        result_frame[x, y, 1] = resize_frame[x, y, 1]
-                        result_frame[x, y, 2] = resize_frame[x, y, 2]
+                        tmp_color = (resize_frame[x, y, 0], resize_frame[x, y, 1], \
+                            resize_frame[x, y, 2])
+                        max_color = max(tmp_color)
+                        max_index = tmp_color.index(max_color)
+                        if (max_index == 0):
+                            result_frame[x, y, 1] = result_frame[x, y, 2] = 0
+                            result_frame[x, y, 0] = 255
+                        elif (max_index == 1):
+                            result_frame[x, y, 0] = result_frame[x, y, 2] = 0
+                            result_frame[x, y, 1] = 255
+                        else:
+                            result_frame[x, y, 0] = result_frame[x, y, 1] = 0
+                            result_frame[x, y, 2] = 255
                     else:
                         result_frame[x, y, 0] = result_frame[x, y, 1] = result_frame[x, y, 2] = 0
         
-        cv2.imshow('hsv', result_frame)
+        cv2.imshow('result', result_frame)
         
         if (cv2.waitKey(1) == 'q'):
             break
