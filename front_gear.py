@@ -23,3 +23,5 @@ def turn_left():
 def turn_right():
     angle_to_duty_cycle(110)
 turn_left()
+time.sleep(2)
+turn_right()
