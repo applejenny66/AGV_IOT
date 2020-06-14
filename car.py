@@ -3,9 +3,9 @@ import time
 import RPi.GPIO as GPIO
 import numpy as np
 from adafruit_motorkit import MotorKit
-from picamera.array import PiRGBArray
-from picamera import PiCamera
-from PIL import Image
+#from picamera.array import PiRGBArray
+#from picamera import PiCamera
+#from PIL import Image
 
 class car:
     def __init__(self):
@@ -20,10 +20,23 @@ class car:
 
         self.pwm = GPIO.PWM(self.CONTROL_PIN, self.PWM_FREQ)
         self.pwm.start(0)
-        self.camera = PiCamera()
+        #self.camera = PiCamera()
         
         time.sleep(0.1)
 
+    def angle_to_duty_cycle(self, angle=0):
+        if (50 <= angle <= 110):
+            GPIO.output(self.CONTROL_PIN, True)
+            dc = (0.05 * self.PWM_FREQ) + (0.19 * self.PWM_FREQ * angle / 180)
+            self.pwm.ChangeDutyCycle(dc)
+            time.sleep(0.3)
+            GPIO.output(self.CONTROL_PIN, False)
+
+    def turn_left(self):
+        self.angle_to_duty_cycle(50)
+
+    def turn_right(self):
+        self.angle_to_duty_cycle(110)
 
     def forward(self):
         self.kit.motor1.throttle = 1.0
@@ -37,11 +50,7 @@ class car:
     def set_throttle(self, value):
         self.kit.motor1.throttle = value
 
-    def angle_to_duty_cycle(self, angle=0):
-        self.duty_cycle = (0.05 * self.PWM_FREQ) + \
-            (0.19 * self.PWM_FREQ * angle / 180)
-        return (self.duty_cycle)
-
+    """
     def capture(self, rawCapture):
         self.camera.capture(rawCapture, format="bgr")
         image = rawCapture.array
@@ -54,12 +63,14 @@ class car:
         resize_im = resize_im.resize((192, 108))
         resize_im.save("test_resize.png")
         return image, resize_im
+    """
 
 if __name__ == "__main__":
     car = car()
-    angle =  50
-    #dc = car.angle_to_duty_cycle(angle)
+    #angle =  50
+    car.angle_to_duty_cycle(angle=50)
+    time.sleep(3)
+    car.angle_to_duty_cycle(angle=110)
     #car.pwm.ChangeDutyCycle(dc)
-    rawCapture = PiRGBArray(car.camera)
-    image, resize_im = car.capture(rawCapture)
-    #print ()
+    #rawCapture = PiRGBArray(car.camera)
+    #image, resize_im = car.capture(rawCapture)

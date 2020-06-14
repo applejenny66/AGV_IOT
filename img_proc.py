@@ -1,14 +1,15 @@
 #img_proc.py
 
 import time
-import RPi.GPIO as GPIO
-from adafruit_motorkit import MotorKit
-from picamera.array import PiRGBArray
-from picamera import PiCamera
-from PIL import Image
+#import RPi.GPIO as GPIO
+#from adafruit_motorkit import MotorKit
+#from picamera.array import PiRGBArray
+#from picamera import PiCamera
+#from PIL import Image
 import cv2
 import numpy as np
 from car import car
+from camera import camera
 
 class image_processing():
     def __init__(self, img):
@@ -32,17 +33,11 @@ class image_processing():
 
 if __name__ == "__main__":
     car = car()
-    angle =  50
+    #angle =  50
     #dc = car.angle_to_duty_cycle(angle)
     #car.pwm.ChangeDutyCycle(dc)
     
 
-    #rawCapture = PiRGBArray(car.camera)
-    #image, resize_im = car.capture(rawCapture)
-
-
-    #img = Image.open("test.png")
-    #print ("img type: ", type(image))
     
     #testing on no car
     img = cv2.imread("testing_img.png")
