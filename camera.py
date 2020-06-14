@@ -49,21 +49,27 @@ def test_color((r, g, b)):
 if __name__ == "__main__":
     #car = car()
     #car.capture()
-    test_color((0, 255, 0))
+    #test_color((0, 255, 0))
     camera = camera()
     while True:
         ret, frame = camera.usb_camera.read() # array
+        # resize
         shape = frame.shape
-        weight, height = shape[0]/5, shape[1]/5
+        weight, height = shape[0]/10, shape[1]/10
         resize_frame = cv2.resize(frame, (height, weight), interpolation=cv2.INTER_CUBIC)
-        #resize_frame = frame
-        #img = cv2.imread('dave.jpg')
         gray_frame = cv2.cvtColor(resize_frame,cv2.COLOR_BGR2GRAY)
+        
+        # fond contours
         ret, thresh = cv2.threshold(gray_frame, 127, 255, 0)
-        #contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        _, contours, _= cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        cv2.drawContours(resize_frame, contours, -1, (0,255,0), 3)
+        _, contours, _= cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
+
+        #cv2.drawContours(resize_frame, contours, -1, (0,255,0), 2)
         #cv2.imshow("gray", gray_frame)
+        
+        
+
+        # find lines(edges)
         edges = cv2.Canny(gray_frame,50,150,apertureSize = 3)
         minLineLength = 10
         maxLineGap = 10
@@ -80,33 +86,101 @@ if __name__ == "__main__":
         #for x1,y1,x2,y2 in lines[0]:
         #    cv2.line(resize_frame,(x1,y1),(x2,y2),(153,51,255),2)
 
-        cv2.imshow('line', resize_frame)
+        #cv2.imshow('line', resize_frame)
         #cv2.imwrite('houghlines5.jpg',img)
+
+        Z = resize_frame.reshape((-1,3))
+        # convert to np.float32
+        Z = np.float32(Z)
+
+        # define criteria, number of clusters(K) and apply kmeans()
+        criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
+        K = 12
+        ret,label,center=cv2.kmeans(Z,K,None,criteria,10,cv2.KMEANS_RANDOM_CENTERS)
+
+        # Now convert back into uint8, and make original image
+        center = np.uint8(center)
+        res = center[label.flatten()]
+        k_img = res.reshape((resize_frame.shape))
+
+        #cv2.imshow('res2',k_img)
+
         
-        """
-        hsv_frame = rgbtohsv(resize_frame) # try to hsv or hsl
+        hsv_frame = rgbtohsl(k_img) # try hsl
+        cv2.imshow('k_img', hsv_frame)
         result_frame = np.zeros((resize_frame.shape))
+        tmp_r = 0
+        r_count = 0
+        r_x_list = []
+        r_y_list = []
+        tmp_g = 0
+        g_count = 0
+        g_x_list = []
+        g_y_list = []
+        tmp_b = 0
+        b_count = 0
+        b_x_list = []
+        b_y_list = []
+        #cv2.imshow('hsv', hsv_frame)
         for x in range(0, weight):
             for y in range(0, height):
-                if (resize_frame[x, y, 0] > 300 or resize_frame[x, y, 0] < 60):
-                    result_frame[x, y, 2] = 255
-                    result_frame[x, y, 0] = result_frame[x, y, 1] = 0
-                elif (resize_frame[x, y, 1] > 60 and resize_frame[x, y, 0] < 180):
-                    result_frame[x, y, 1] = 255
-                    result_frame[x, y, 0] = result_frame[x, y, 2] = 0
-                elif (resize_frame[x, y, 0] > 180 and resize_frame[x, y, 0] < 300):
-                    result_frame[x, y, 0] = 255
-                    result_frame[x, y, 1] = result_frame[x, y, 2] = 0
-
-        cv2.imshow('video', result_frame)
+                if (hsv_frame[x, y, 0] > 90 and hsv_frame[x, y, 0] < 150):
+                    tmp_g += hsv_frame[x, y, 0]
+                    b_count += 1
+        if (b_count != 0):
+            tmp_g = int(tmp_g / b_count)
+            #result_frame[x, y, 0] = result_frame[x, y, 1] = result_frame[x, y, 2] = 255
+        for x in range(0, weight):
+            for y in range(0, height):
+                if (hsv_frame[x, y, 0] > tmp_g and hsv_frame[x, y, 0] < 150):
+                    result_frame[x, y, 0] = result_frame[x, y, 1] = result_frame[x, y, 2] = 255
+        cv2.imshow('green', result_frame)
+        """
+        for x in range(0, weight):
+            for y in range(0, height):
+                if (resize_frame[x, y, 0] > 320 or resize_frame[x, y, 0] < 40):
+                    if (resize_frame[x, y, 0] > 300):
+                        resize_frame[x, y, 0] = 300-resize_frame[x, y, 0]
+                    tmp_r += resize_frame[x, y, 0]
+                    r_count += 1
+                    #result_frame[x, y, 2] = 255
+                    #result_frame[x, y, 0] = result_frame[x, y, 1] = 0
+                elif (resize_frame[x, y, 0] > 80 and resize_frame[x, y, 0] < 160):
+                    tmp_g += resize_frame[x, y, 0]
+                    g_count += 1
+                    #result_frame[x, y, 1] = 255
+                    #result_frame[x, y, 0] = result_frame[x, y, 2] = 0
+                elif (resize_frame[x, y, 0] > 200 and resize_frame[x, y, 0] < 280):
+                    tmp_b += resize_frame[x, y, 0]
+                    b_count += 1
+                    #result_frame[x, y, 0] = 255
+                    #result_frame[x, y, 1] = result_frame[x, y, 2] = 0
+        if (r_count != 0):
+            print ("r: ", r_count)
+            tmp_r = int(tmp_r / r_count)
+        if (g_count != 0):
+            print ("g: ", g_count)
+            tmp_g = int(tmp_g / g_count)
+        if (b_count != 0):
+            tmp_b = int(tmp_b / b_count)
+        for x in range(0, weight):
+            for y in range(0, height):
+                if (resize_frame[x, y, 0] < tmp_b and resize_frame[x, y, 0] > 180):
+                    resize_frame[x, y, 0] = resize_frame[x, y, 1] = resize_frame[x, y, 2] = 0
+                elif (resize_frame[x, y, 0] < tmp_g and resize_frame[x, y, 0] > 60):
+                    resize_frame[x, y, 0] = resize_frame[x, y, 1] = resize_frame[x, y, 2] = 0
+                elif (resize_frame[x, y, 0] < tmp_r and resize_frame[x, y, 0] > -60):
+                    resize_frame[x, y, 0] = resize_frame[x, y, 1] = resize_frame[x, y, 2] = 0
+        """
+        #cv2.imshow('video', resize_frame)
         
         #numpy_vertical = np.vstack((image, grey_3_channel))
-        hori_together = np.hstack((resize_frame, hsv_frame, result_frame))
+        #hori_together = np.hstack((resize_frame, hsv_frame, result_frame))
 
         #numpy_vertical_concat = np.concatenate((image, grey_3_channel), axis=0)
-        hori_concat = np.concatenate((resize_frame, hsv_frame, result_frame), axis=1)
-        """
-
+        #hori_concat = np.concatenate((resize_frame, hsv_frame, result_frame), axis=1)
+        
+        
         #cv2.imshow('video', hori_concat)
         if (cv2.waitKey(1) == 'q'):
             break
