@@ -9,8 +9,8 @@ from car import car
 from camera_specific import camera, rgbtohsv, rgbtohsl, test_color, find_green
 
 def main(index_designated=2):
-    car = car()
-    car.forward()
+    car_ = car()
+    car_.forward()
     camera = camera()
     # index_desigated = 2 #0 = b, 1 = g, 2 = r
     kernel = np.ones((4,4),np.float32)/16
@@ -140,29 +140,29 @@ def main(index_designated=2):
 
         if abs(avg_x-mean_weight) < 5:
             if abs(avg_y-mean_height) < 5:
-                car.forward()
+                car_.forward()
             else:
-                car.set_throttle(0.1)
+                car_.set_throttle(0.1)
                 if (avg_y-mean_height > 0):
-                    car.turn_right()
+                    car_.turn_right()
                 else:
-                    car.turn_left()
+                    car_.turn_left()
         elif abs(avg_x-mean_weight) > 5:
-            car.set_throttle(0.1)
+            car_.set_throttle(0.1)
             if abs(avg_y-mean_height < 5):
                 if (avg_x-mean_weight > 0):
-                    car.set_throttle(-0.1)
+                    car_.set_throttle(-0.1)
 
             else:
                 if (avg_y-mean_height > 0):
                     if (avg_x-mean_weight > 0):
-                        car.set_throttle(-0.1)
-                        car.turn_right()
+                        car_.set_throttle(-0.1)
+                        car_.turn_right()
                     else:
-                        car.set_throttle(0.1)
-                        car.turn_left()
+                        car_.set_throttle(0.1)
+                        car_.turn_left()
         else:
-            car.stop()
+            car_.stop()
 
         #cv2.imshow('result', result_frame)
         
