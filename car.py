@@ -31,21 +31,24 @@ class car:
             self.pwm.ChangeDutyCycle(dc)
             time.sleep(0.3)
             GPIO.output(self.CONTROL_PIN, False)
+    
+    def straight(self):
+        self.angle_to_duty_cycle(85)
 
     def turn_left(self):
-        self.angle_to_duty_cycle(50)
+        self.angle_to_duty_cycle(60) #50
 
     def turn_right(self):
-        self.angle_to_duty_cycle(110)
+        self.angle_to_duty_cycle(100) #110
 
     def forward(self):
-        self.kit.motor1.throttle = 0.5
+        self.kit.motor1.throttle = 0.3
 
     def stop(self):
         self.kit.motor1.throttle = 0
 
     def backfard(self):
-        self.kit.motor1.throttle = -0.5
+        self.kit.motor1.throttle = -0.3
 
     def set_throttle(self, value):
         self.kit.motor1.throttle = value
@@ -66,11 +69,22 @@ class car:
     """
 
 if __name__ == "__main__":
-    car = car()
+    car_ = car()
     #angle =  50
-    car.angle_to_duty_cycle(angle=50)
-    time.sleep(3)
-    car.angle_to_duty_cycle(angle=110)
+    car_.straight()
+    #car_.angle_to_duty_cycle(angle=85)
+    time.sleep(1)
+    car_.forward()
+    time.sleep(4)
+    car_.set_throttle(0.1)
+    car_.angle_to_duty_cycle(angle=50)
+    time.sleep(2)
+    car_.straight()
+    car_.forward()
+    time.sleep(2.5)
+    #car_.angle_to_duty_cycle(angle=110)
+    #time.sleep(0.1)
+    car_.stop()
     #car.pwm.ChangeDutyCycle(dc)
     #rawCapture = PiRGBArray(car.camera)
     #image, resize_im = car.capture(rawCapture)
