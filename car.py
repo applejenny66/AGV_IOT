@@ -39,13 +39,13 @@ class car:
         self.angle_to_duty_cycle(110)
 
     def forward(self):
-        self.kit.motor1.throttle = 1.0
+        self.kit.motor1.throttle = 0.5
 
     def stop(self):
         self.kit.motor1.throttle = 0
 
     def backfard(self):
-        self.kit.motor1.throttle = -1.0
+        self.kit.motor1.throttle = -0.5
 
     def set_throttle(self, value):
         self.kit.motor1.throttle = value

@@ -14,6 +14,7 @@ def main(index_designated=2):
     camera_ = camera()
     # index_desigated = 2 #0 = b, 1 = g, 2 = r
     kernel = np.ones((4,4),np.float32)/16
+    counter = 0
     while True:
         ret, frame = camera_.usb_camera.read()
         shape = frame.shape
@@ -165,7 +166,9 @@ def main(index_designated=2):
             car_.stop()
 
         #cv2.imshow('result', result_frame)
-        
+        savename = "./test_img/" + str(counter) + ".png"
+        cv2.imwrite(savename, result_frame)
+        counter += 1
         if (cv2.waitKey(1) == 'q'):
             break
     camera_.usb_camera.release()
