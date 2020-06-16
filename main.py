@@ -11,11 +11,11 @@ from camera_specific import camera, rgbtohsv, rgbtohsl, test_color, find_green
 def main(index_designated=2):
     car_ = car()
     car_.forward()
-    camera = camera()
+    camera_ = camera()
     # index_desigated = 2 #0 = b, 1 = g, 2 = r
     kernel = np.ones((4,4),np.float32)/16
     while True:
-        ret, frame = camera.usb_camera.read()
+        ret, frame = camera_.usb_camera.read()
         shape = frame.shape
         weight, height = shape[0]//10, shape[1]//10
         resize_frame = cv2.resize(frame, (height, weight), interpolation=cv2.INTER_CUBIC)
@@ -168,7 +168,7 @@ def main(index_designated=2):
         
         if (cv2.waitKey(1) == 'q'):
             break
-    camera.usb_camera.release()
+    camera_.usb_camera.release()
     cv2.destroyAllWindows()
 
 
