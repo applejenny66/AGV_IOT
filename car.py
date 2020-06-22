@@ -42,13 +42,13 @@ class car:
         self.angle_to_duty_cycle(100) #110
 
     def forward(self):
-        self.kit.motor1.throttle = 0.3
+        self.kit.motor1.throttle = 0.4
 
     def stop(self):
         self.kit.motor1.throttle = 0
 
     def backfard(self):
-        self.kit.motor1.throttle = -0.3
+        self.kit.motor1.throttle = -0.4
 
     def set_throttle(self, value):
         self.kit.motor1.throttle = value
@@ -69,22 +69,29 @@ class car:
     """
 
 if __name__ == "__main__":
-    car_ = car()
+    #car_ = car()
     #angle =  50
-    car_.straight()
+    #car_.straight()
     #car_.angle_to_duty_cycle(angle=85)
+    #time.sleep(1)
+    #car_.forward()
+    #time.sleep(3)
+    #car_.set_throttle(0.1)
+    #time.sleep(0.5)
+    car_.angle_to_duty_cycle(100)
     time.sleep(1)
     car_.forward()
-    time.sleep(4)
-    car_.set_throttle(0.1)
-    car_.angle_to_duty_cycle(angle=50)
-    time.sleep(2)
-    car_.straight()
-    car_.forward()
-    time.sleep(2.5)
+    time.sleep(1)
+    car_.stop()
+    #time.sleep(1)
+    #car_.angle_to_duty_cycle(angle=50)
+    #time.sleep(2)
+    #car_.straight()
+    #car_.forward()
+    #time.sleep(2.5)
     #car_.angle_to_duty_cycle(angle=110)
     #time.sleep(0.1)
-    car_.stop()
+    #car_.stop()
     #car.pwm.ChangeDutyCycle(dc)
     #rawCapture = PiRGBArray(car.camera)
     #image, resize_im = car.capture(rawCapture)
