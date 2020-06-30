@@ -42,13 +42,13 @@ class car:
         self.angle_to_duty_cycle(100) #110
 
     def forward(self):
-        self.kit.motor1.throttle = 0.4
+        self.kit.motor1.throttle = 1
 
     def stop(self):
         self.kit.motor1.throttle = 0
 
     def backfard(self):
-        self.kit.motor1.throttle = -0.4
+        self.kit.motor1.throttle = -1
 
     def set_throttle(self, value):
         self.kit.motor1.throttle = value
@@ -68,12 +68,33 @@ class car:
         return image, resize_im
     """
 
+def route_1():
+    car_ = car()
+    car_.straight()
+    car_.forward()
+    car_.sleep(1)
+    for i in range(0, 10):
+        car_.set_throttle(1-i*0.1)
+        time.sleep(0.1)
+    car_.stop()
+    car_.turn_left()
+    time.sleep(1)
+    car_.stop()
+    print ("finished")
+
+
 if __name__ == "__main__":
     car_test = car()
     car_test.straight()
     time.sleep(1)
     car_test.forward()
     time.sleep(3)
+    car_test.stop()
+    time.sleep(0.5)
+    car_test.turn_left()
+    car_test.set_throttle(0.2)
+    time.sleep(2)
+    car_test.stop()
 
 
 
