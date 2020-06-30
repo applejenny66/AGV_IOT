@@ -33,7 +33,7 @@ class car:
             GPIO.output(self.CONTROL_PIN, False)
     
     def straight(self):
-        self.angle_to_duty_cycle(82)
+        self.angle_to_duty_cycle(91)
 
     def turn_left(self):
         self.angle_to_duty_cycle(50) #50
@@ -71,15 +71,52 @@ class car:
 def route_1():
     car_ = car()
     car_.straight()
+    time.sleep(0.2)
     car_.forward()
-    time.sleep(1)
-    for i in range(0, 9):
+    time.sleep(1.1)
+    for i in range(0, 5):
         car_.set_throttle(0.8-i*0.1)
         time.sleep(0.1)
-    car_.stop()
+    #car_.stop()
+    #car_.set_throttle(0.3)
+    time.sleep(0.2)
     car_.turn_left()
-    time.sleep(0.75)
-    car_.stop()
+    for i in range(0, 3):
+        car_.set_throttle(0.4+i*0.1)
+        time.sleep(0.1)
+    time.sleep(1.1)
+    car_.set_throttle(0)
+    time.sleep(0.1)
+    car_.straight()
+    time.sleep(0.2)
+    car_.forward()
+    time.sleep(0.5)
+    for i in range(0, 5):
+        car_.set_throttle(0.8-i*0.1)
+        time.sleep(0.1)
+
+    car_.set_throttle(0)
+
+    #for i in range(0, 3):
+    #    car_.set_throttle(0.2-i*0.1)
+    #    time.sleep(0.1)
+    #car_.stop()
+    #car_.set_throttle(0.4)
+    #time.sleep(1)
+    #car_.set_throttle(0.4)
+    #time.sleep(1)
+    car_.set_throttle(0)
+    #car_.set_throttle(0.4)
+    #time.sleep(0.1)
+    #car_.straight()
+    #car_.forward()
+    #time.sleep(0.5)
+    #for i in range(0, 9):
+    #    car_.set_throttle(0.8-i*0.1)
+    #    time.sleep(0.1)
+    #car_.stop()
+    #car_.straight()
+    #car_.stop()
     print ("finished")
 
 
