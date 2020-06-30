@@ -33,10 +33,10 @@ class car:
             GPIO.output(self.CONTROL_PIN, False)
     
     def straight(self):
-        self.angle_to_duty_cycle(85)
+        self.angle_to_duty_cycle(82)
 
     def turn_left(self):
-        self.angle_to_duty_cycle(60) #50
+        self.angle_to_duty_cycle(50) #50
 
     def turn_right(self):
         self.angle_to_duty_cycle(100) #110
@@ -78,7 +78,7 @@ def route_1():
         time.sleep(0.1)
     car_.stop()
     car_.turn_left()
-    time.sleep(1)
+    time.sleep(0.75)
     car_.stop()
     print ("finished")
 
