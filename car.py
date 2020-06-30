@@ -42,13 +42,13 @@ class car:
         self.angle_to_duty_cycle(100) #110
 
     def forward(self):
-        self.kit.motor1.throttle = 1
+        self.kit.motor1.throttle = 0.8
 
     def stop(self):
         self.kit.motor1.throttle = 0
 
     def backfard(self):
-        self.kit.motor1.throttle = -1
+        self.kit.motor1.throttle = -0.8
 
     def set_throttle(self, value):
         self.kit.motor1.throttle = value
@@ -72,9 +72,9 @@ def route_1():
     car_ = car()
     car_.straight()
     car_.forward()
-    car_.sleep(1)
-    for i in range(0, 10):
-        car_.set_throttle(1-i*0.1)
+    time.sleep(1)
+    for i in range(0, 9):
+        car_.set_throttle(0.8-i*0.1)
         time.sleep(0.1)
     car_.stop()
     car_.turn_left()
@@ -83,6 +83,10 @@ def route_1():
     print ("finished")
 
 
+if __name__ == "__main__":
+    route_1()
+
+"""
 if __name__ == "__main__":
     car_test = car()
     car_test.straight()
@@ -95,6 +99,6 @@ if __name__ == "__main__":
     car_test.set_throttle(0.2)
     time.sleep(2)
     car_test.stop()
-
+"""
 
 
